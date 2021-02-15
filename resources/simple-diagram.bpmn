@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1p1k5lo" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.6.0">
+  <bpmn:process id="myprocess" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_06oomne</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_06oomne" sourceRef="StartEvent_1" targetRef="Activity_00v8v1i" />
+    <bpmn:serviceTask id="Activity_00v8v1i" name="Send email" camunda:resultVariable="destination" camunda:clojure="clj-camunda.core/send-mail">
+      <bpmn:incoming>Flow_06oomne</bpmn:incoming>
+      <bpmn:outgoing>Flow_1qr3cle</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_1mdl3sp">
+      <bpmn:incoming>Flow_1qr3cle</bpmn:incoming>
+      <bpmn:outgoing>Flow_1n7giqw</bpmn:outgoing>
+      <bpmn:outgoing>Flow_090w1uh</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1qr3cle" sourceRef="Activity_00v8v1i" targetRef="Gateway_1mdl3sp" />
+    <bpmn:sequenceFlow id="Flow_1n7giqw" sourceRef="Gateway_1mdl3sp" targetRef="Activity_17zfhc2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="Clojure">(= destination "gmail")</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_090w1uh" sourceRef="Gateway_1mdl3sp" targetRef="Activity_132kwp5" />
+    <bpmn:serviceTask id="Activity_17zfhc2" name="Log Gmail Account" camunda:clojure="clj-camunda.core/log-gmail-account">
+      <bpmn:incoming>Flow_1n7giqw</bpmn:incoming>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_132kwp5" name="Log other email account" camunda:clojure="clj-camunda.core/log-other-email-account">
+      <bpmn:incoming>Flow_090w1uh</bpmn:incoming>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="myprocess">
+      <bpmndi:BPMNEdge id="Flow_090w1uh_di" bpmnElement="Flow_090w1uh">
+        <di:waypoint x="460" y="142" />
+        <di:waypoint x="460" y="230" />
+        <di:waypoint x="530" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1n7giqw_di" bpmnElement="Flow_1n7giqw">
+        <di:waypoint x="485" y="117" />
+        <di:waypoint x="530" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qr3cle_di" bpmnElement="Flow_1qr3cle">
+        <di:waypoint x="390" y="117" />
+        <di:waypoint x="435" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06oomne_di" bpmnElement="Flow_06oomne">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="290" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1rcwg5w_di" bpmnElement="Activity_00v8v1i">
+        <dc:Bounds x="290" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1mdl3sp_di" bpmnElement="Gateway_1mdl3sp" isMarkerVisible="true">
+        <dc:Bounds x="435" y="92" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1e8osgo_di" bpmnElement="Activity_17zfhc2">
+        <dc:Bounds x="530" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19kaibk_di" bpmnElement="Activity_132kwp5">
+        <dc:Bounds x="530" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
